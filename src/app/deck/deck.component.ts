@@ -41,13 +41,15 @@ export class DeckComponent implements OnInit {
       bearing: INITIAL_VIEW_STATE.bearing,
       pitch: INITIAL_VIEW_STATE.pitch,
       accessToken: MAPBOX_TOKEN,
-      interactive: true,
+      // Note: deck.gl will be in charge of interaction and event handling
+      interactive: false,
     });
   }
 
   private buildDeckGL() {
     this.deck = new Deck({
       canvas: this.deckCanvasEl.nativeElement,
+      controller: true,
       viewState: INITIAL_VIEW_STATE,
       onViewStateChange: ({ viewState }) => {
         this.map.jumpTo({
@@ -57,24 +59,32 @@ export class DeckComponent implements OnInit {
           pitch: viewState.pitch,
         });
       },
+      layers: [],
     });
   }
 
   private setupLayers() {
-    this.mapDataService
-      .selectMapData()
-      .pipe(untilDestroyed(this))
-      .subscribe((data) => {
-        const layer = new GeoJsonLayer({
-          id: 'example-layer',
-          data,
-          pickable: true,
-          visible: true,
-          getPointRadius: 2,
-          getFillColor: [255, 255, 255],
-          filled: true,
+    this.map.on('load', () => {
+      this.mapDataService
+        .selectMapData()
+        .pipe(untilDestroyed(this))
+        .subscribe((data) => {
+          const layer = new GeoJsonLayer({
+            id: 'geojson-layer',
+            data,
+            pickable: true,
+            stroked: false,
+            filled: true,
+            extruded: true,
+            pointType: 'circle',
+            lineWidthScale: 20,
+            lineWidthMinPixels: 2,
+            getFillColor: [160, 160, 180, 200],
+            getPointRadius: 100,
+            getLineWidth: 1,
+            getElevation: 30,
+          });
         });
-        this.deck.setProps({ layers: [layer] });
-      });
+    });
   }
 }
