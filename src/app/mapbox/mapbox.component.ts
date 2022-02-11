@@ -5,13 +5,10 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {
-  INITIAL_VIEW_STATE,
-  MAPBOX_TOKEN,
-  MapDataService,
-} from '../core/map-data.service';
+import { MapDataService } from '../core/map-data.service';
 import * as mapboxgl from 'mapbox-gl';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { INITIAL_VIEW_STATE, MAPBOX_TOKEN } from '../core/map';
 
 enum MapSource {
   exampleSource = 'exampleSource',

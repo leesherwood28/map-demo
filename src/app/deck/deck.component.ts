@@ -1,13 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import {
-  INITIAL_VIEW_STATE,
-  MAPBOX_TOKEN,
-  MapDataService,
-} from '../core/map-data.service';
+import { MapDataService } from '../core/map-data.service';
 import { Deck } from '@deck.gl/core';
 import * as mapboxgl from 'mapbox-gl';
 import { GeoJsonLayer } from '@deck.gl/layers';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { INITIAL_VIEW_STATE, MAPBOX_TOKEN } from '../core/map';
 
 @UntilDestroy()
 @Component({
