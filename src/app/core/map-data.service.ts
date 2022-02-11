@@ -24,8 +24,8 @@ export class MapDataService {
     return interval(1000).pipe(
       map((i) => {
         return {
-          latDeg: 49 - i * 0.001,
-          lngDeg: -1,
+          latDeg: 51,
+          lngDeg: -1 - 0.0001 * i,
         };
       })
     );

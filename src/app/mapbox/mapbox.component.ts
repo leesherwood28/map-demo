@@ -7,10 +7,47 @@ import {
 } from '@angular/core';
 import { INITIAL_VIEW_STATE, MapDataService } from '../core/map-data.service';
 import * as mapboxgl from 'mapbox-gl';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
 const MAPBOX_TOKEN =
   'pk.eyJ1IjoiYWxleGhvcmxvY2siLCJhIjoiY2s0OGg1MHc4MDdxNjNscHJwYTB2bHJ1YiJ9.c3H4HGTppUzmOsxX-KvlCw';
 
+enum MapSource {
+  exampleSource = 'exampleSource',
+}
+
+enum MapLayer {
+  exampleLayer = 'exampleLayer',
+}
+
+const EXAMPLE_LAYER = {
+  id: MapLayer.exampleLayer,
+  source: MapSource.exampleSource,
+  type: 'circle',
+  paint: {
+    'circle-radius': {
+      base: 2,
+      stops: [
+        [10, 5],
+        [13, 11],
+      ],
+    },
+    'circle-color': '#D29500',
+  },
+};
+
+function getExampleFeature() {
+  return {
+    type: 'Feature',
+    properties: {},
+    geometry: {
+      type: 'Point',
+      coordinates: [],
+    },
+  };
+}
+
+@UntilDestroy()
 @Component({
   selector: 'app-mapbox',
   templateUrl: './mapbox.component.html',
@@ -39,7 +76,26 @@ export class MapboxComponent implements OnInit, AfterViewInit {
       accessToken: MAPBOX_TOKEN,
       interactive: true,
     });
+    this.map.on('load', () => {
+      this.setupMapSources();
+      this.setupMapLayers();
+    });
   }
 
-  private setupMapData() {}
+  private setupMapLayers() {
+    // @ts-ignore
+    this.map.addLayer(EXAMPLE_LAYER);
+  }
+
+  private setupMapSources() {
+    this.map.addSource(MapSource.exampleSource, {
+      type: 'geojson',
+      // @ts-ignore
+      data: getExampleFeature(),
+    });
+  }
+
+  private setupMapData() {
+    this.mapDataService.selectMapData();
+  }
 }
