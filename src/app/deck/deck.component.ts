@@ -83,7 +83,6 @@ export class DeckComponent implements OnInit {
                 },
               },
             ],
-            // Look how easy this is
             visible: state.visible,
             filled: true,
             pointRadiusMinPixels: 5,
