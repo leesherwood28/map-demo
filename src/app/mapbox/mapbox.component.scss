@@ -1,5 +1,11 @@
 :host {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+button {
+  place-self: center;
+  margin: 1rem;
+  padding: 0.5rem;
 }

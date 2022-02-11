@@ -64,6 +64,7 @@ export class MapboxComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.setupMap();
   }
+  togglePointVisibilty() {}
 
   private setupMap() {
     this.map = new mapboxgl.Map({
