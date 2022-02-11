@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MapDataService } from '../core/map-data.service';
 import { Deck } from '@deck.gl/core';
-import * as mapboxgl from 'mapbox-gl';
 import { GeoJsonLayer } from '@deck.gl/layers';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import * as mapboxgl from 'mapbox-gl';
+import { DeckDataService } from '../core/deck-data.service';
 import { INITIAL_VIEW_STATE, MAPBOX_TOKEN } from '../core/map';
 
 @UntilDestroy()
@@ -19,14 +19,20 @@ export class DeckComponent implements OnInit {
   map!: mapboxgl.Map;
   deck!: Deck;
 
-  constructor(private mapDataService: MapDataService) {}
+  constructor(private deckDataService: DeckDataService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.deckDataService.resetState();
+  }
 
   ngAfterViewInit() {
     this.buildMap();
     this.buildDeckGL();
     this.setupLayers();
+  }
+
+  togglePointVisibilty() {
+    this.deckDataService.togglePointVisibility();
   }
 
   private buildMap() {
@@ -62,10 +68,10 @@ export class DeckComponent implements OnInit {
 
   private setupLayers() {
     this.map.on('load', () => {
-      this.mapDataService
-        .selectMapData()
+      this.deckDataService
+        .selectState()
         .pipe(untilDestroyed(this))
-        .subscribe((data) => {
+        .subscribe((state) => {
           const layer = new GeoJsonLayer({
             id: 'geojson-layer',
             data: [
@@ -73,10 +79,12 @@ export class DeckComponent implements OnInit {
                 type: 'Feature',
                 geometry: {
                   type: 'Point',
-                  coordinates: [data.lngDeg, data.latDeg],
+                  coordinates: [state.data.lngDeg, state.data.latDeg],
                 },
               },
             ],
+            // Look how easy this is
+            visible: state.visible,
             filled: true,
             pointRadiusMinPixels: 5,
             pointRadiusScale: 1,
