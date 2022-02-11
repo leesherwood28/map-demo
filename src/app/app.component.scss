@@ -4,6 +4,7 @@
   width: 100vw;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr);
+  gap: 1rem;
 }
 
 .buttons {
@@ -11,4 +12,5 @@
   grid-auto-flow: column;
   gap: 1rem;
   align-self: center;
+  justify-content: center;
 }
