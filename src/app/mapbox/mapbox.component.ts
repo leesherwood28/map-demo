@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { INITIAL_VIEW_STATE, MapDataService } from '../core/map-data.service';
 import * as mapboxgl from 'mapbox-gl';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 const MAPBOX_TOKEN =
   'pk.eyJ1IjoiYWxleGhvcmxvY2siLCJhIjoiY2s0OGg1MHc4MDdxNjNscHJwYTB2bHJ1YiJ9.c3H4HGTppUzmOsxX-KvlCw';
@@ -36,16 +36,14 @@ const EXAMPLE_LAYER = {
   },
 };
 
-function getExampleFeature() {
-  return {
-    type: 'Feature',
-    properties: {},
-    geometry: {
-      type: 'Point',
-      coordinates: [],
-    },
-  };
-}
+const EXAMPLE_FEAUTE = {
+  type: 'Feature',
+  properties: {},
+  geometry: {
+    type: 'Point',
+    coordinates: [] as number[],
+  },
+};
 
 @UntilDestroy()
 @Component({
@@ -76,9 +74,10 @@ export class MapboxComponent implements OnInit, AfterViewInit {
       accessToken: MAPBOX_TOKEN,
       interactive: true,
     });
-    this.map.on('load', () => {
+    this.map.on('style.load', () => {
       this.setupMapSources();
       this.setupMapLayers();
+      this.setupMapData();
     });
   }
 
@@ -91,11 +90,18 @@ export class MapboxComponent implements OnInit, AfterViewInit {
     this.map.addSource(MapSource.exampleSource, {
       type: 'geojson',
       // @ts-ignore
-      data: getExampleFeature(),
+      data: EXAMPLE_FEAUTE,
     });
   }
 
   private setupMapData() {
-    this.mapDataService.selectMapData();
+    this.mapDataService
+      .selectMapData()
+      .pipe(untilDestroyed(this))
+      .subscribe((data) => {
+        EXAMPLE_FEAUTE.geometry.coordinates = [data.lngDeg, data.latDeg];
+        // @ts-ignore
+        this.map.getSource(MapSource.exampleSource).setData(EXAMPLE_FEAUTE);
+      });
   }
 }
