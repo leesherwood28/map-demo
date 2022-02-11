@@ -71,19 +71,22 @@ export class DeckComponent implements OnInit {
         .subscribe((data) => {
           const layer = new GeoJsonLayer({
             id: 'geojson-layer',
-            data,
-            pickable: true,
-            stroked: false,
+            data: [
+              {
+                type: 'Feature',
+                geometry: {
+                  type: 'Point',
+                  coordinates: [data.lngDeg, data.latDeg],
+                },
+              },
+            ],
             filled: true,
-            extruded: true,
-            pointType: 'circle',
-            lineWidthScale: 20,
-            lineWidthMinPixels: 2,
-            getFillColor: [160, 160, 180, 200],
-            getPointRadius: 100,
-            getLineWidth: 1,
-            getElevation: 30,
+            pointRadiusMinPixels: 5,
+            pointRadiusScale: 1,
+            getPointRadius: 5,
+            getFillColor: [255, 255, 255],
           });
+          this.deck.setProps({ layers: [layer] });
         });
     });
   }
