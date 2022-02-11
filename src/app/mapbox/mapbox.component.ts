@@ -5,12 +5,13 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { INITIAL_VIEW_STATE, MapDataService } from '../core/map-data.service';
+import {
+  INITIAL_VIEW_STATE,
+  MAPBOX_TOKEN,
+  MapDataService,
+} from '../core/map-data.service';
 import * as mapboxgl from 'mapbox-gl';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-
-const MAPBOX_TOKEN =
-  'pk.eyJ1IjoiYWxleGhvcmxvY2siLCJhIjoiY2s0OGg1MHc4MDdxNjNscHJwYTB2bHJ1YiJ9.c3H4HGTppUzmOsxX-KvlCw';
 
 enum MapSource {
   exampleSource = 'exampleSource',
@@ -32,7 +33,7 @@ const EXAMPLE_LAYER = {
         [13, 11],
       ],
     },
-    'circle-color': '#D29500',
+    'circle-color': 'white',
   },
 };
 

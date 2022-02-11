@@ -14,6 +14,9 @@ export const INITIAL_VIEW_STATE = {
   pitch: 0,
 };
 
+export const MAPBOX_TOKEN =
+  'pk.eyJ1IjoiYWxleGhvcmxvY2siLCJhIjoiY2s0OGg1MHc4MDdxNjNscHJwYTB2bHJ1YiJ9.c3H4HGTppUzmOsxX-KvlCw';
+
 @Injectable({
   providedIn: 'root',
 })
