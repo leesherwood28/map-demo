@@ -36,14 +36,16 @@ const EXAMPLE_LAYER = {
   },
 };
 
-const EXAMPLE_FEAUTE = {
-  type: 'Feature',
-  properties: {},
-  geometry: {
-    type: 'Point',
-    coordinates: [] as number[],
-  },
-};
+function getExampleFeature() {
+  return {
+    type: 'Feature',
+    properties: {},
+    geometry: {
+      type: 'Point',
+      coordinates: [] as number[],
+    },
+  };
+}
 
 @UntilDestroy()
 @Component({
@@ -52,6 +54,8 @@ const EXAMPLE_FEAUTE = {
   styleUrls: ['./mapbox.component.scss'],
 })
 export class MapboxComponent implements OnInit, AfterViewInit {
+  readonly exampleFeature = getExampleFeature();
+
   @ViewChild('map') mapEl!: ElementRef<HTMLDivElement>;
   map!: mapboxgl.Map;
 
@@ -90,7 +94,7 @@ export class MapboxComponent implements OnInit, AfterViewInit {
     this.map.addSource(MapSource.exampleSource, {
       type: 'geojson',
       // @ts-ignore
-      data: EXAMPLE_FEAUTE,
+      data: this.exampleFeature,
     });
   }
 
@@ -99,9 +103,12 @@ export class MapboxComponent implements OnInit, AfterViewInit {
       .selectMapData()
       .pipe(untilDestroyed(this))
       .subscribe((data) => {
-        EXAMPLE_FEAUTE.geometry.coordinates = [data.lngDeg, data.latDeg];
+        this.exampleFeature.geometry.coordinates = [data.lngDeg, data.latDeg];
         // @ts-ignore
-        this.map.getSource(MapSource.exampleSource).setData(EXAMPLE_FEAUTE);
+        this.map
+          .getSource(MapSource.exampleSource)
+          // @ts-ignore
+          .setData(this.exampleFeature);
       });
   }
 }

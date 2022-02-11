@@ -25,7 +25,7 @@ export class MapDataService {
       map((i) => {
         return {
           latDeg: 51,
-          lngDeg: -1 - 0.0001 * i,
+          lngDeg: -1 - 0.01 * i,
         };
       })
     );
