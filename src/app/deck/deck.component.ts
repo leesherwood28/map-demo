@@ -50,7 +50,7 @@ export class DeckComponent implements OnInit {
     this.deck = new Deck({
       canvas: this.deckCanvasEl.nativeElement,
       controller: true,
-      viewState: INITIAL_VIEW_STATE,
+      initialViewState: INITIAL_VIEW_STATE,
       onViewStateChange: ({ viewState }) => {
         this.map.jumpTo({
           center: [viewState.longitude || 0, viewState.latitude || 0],
