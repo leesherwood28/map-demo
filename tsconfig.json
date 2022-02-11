@@ -22,7 +22,9 @@
     "lib": [
       "es2020",
       "dom"
-    ]
+    ],
+    // TODO Remove
+    "noImplicitAny": false,
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
